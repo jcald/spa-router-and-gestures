@@ -7,7 +7,7 @@
 </script>
 
 <h1>Home</h1>
-<div id="nav">
+<div id="nav" class="bg-yellow-400 shadow-lg">
   <a href="/about" class="href" use:link> To About Page</a>
   <a href="/items/{contador}" class="href" use:link> To Items Page</a>
   <a href="/login/{name}/{pass}" class="href" use:link> To login Page</a>
@@ -27,4 +27,15 @@
   #nav {
     flex-flow: row;
   }
+  .href:hover {
+    @apply p-3 bg-blue-700 text-white;
+  }
+  /* .href:hover {
+    @apply bg-blue-700 text-white shadow-lg;
+  } 
+  .href:hover {
+    @apply bg-blue-700 text-white;
+}
+p-3 hover:text-red-900
+  */
 </style>

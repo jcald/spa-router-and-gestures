@@ -1,69 +1,72 @@
 <script>
-	import { setPointerControls, DEFAULT_DELAY } from 'svelte-gestures';
+  import { setPointerControls, DEFAULT_DELAY } from "svelte-gestures";
+  import { link } from "svelte-spa-router";
 
-	let dx;
-	let dy;
+  let dx;
+  let dy;
 
-	function doubletapHandler(event) {
-		dx = event.detail.x;
-		dy = event.detail.y;
-	}
+  function doubletapHandler(event) {
+    dx = event.detail.x;
+    dy = event.detail.y;
+  }
 
-	function doubletap(node, parameters = { timeframe: DEFAULT_DELAY }) {
-		const gestureName = 'doubletap';
+  function doubletap(node, parameters = { timeframe: DEFAULT_DELAY }) {
+    const gestureName = "doubletap";
     const spread = 20;
-		
-		let startTime;
-		let clientX;
-		let clientY;
-		let tapCount = 0;
-		let timeout;
 
-		function onUp(activeEvents, event) {
-			if (
-				Math.abs(event.clientX - clientX) < spread &&
-				Math.abs(event.clientY - clientY) < spread &&
-				Date.now() - startTime < parameters.timeframe
-			) {
-				if (!tapCount) {
-					tapCount++;
-				} else {
-					const rect = node.getBoundingClientRect();
-					const x = Math.round(event.clientX - rect.left);
-					const y = Math.round(event.clientY - rect.top);
+    let startTime;
+    let clientX;
+    let clientY;
+    let tapCount = 0;
+    let timeout;
 
-					node.dispatchEvent(
-						new CustomEvent(gestureName, {
-							detail: { x, y }
-						})
-					);
+    function onUp(activeEvents, event) {
+      if (
+        Math.abs(event.clientX - clientX) < spread &&
+        Math.abs(event.clientY - clientY) < spread &&
+        Date.now() - startTime < parameters.timeframe
+      ) {
+        if (!tapCount) {
+          tapCount++;
+        } else {
+          const rect = node.getBoundingClientRect();
+          const x = Math.round(event.clientX - rect.left);
+          const y = Math.round(event.clientY - rect.top);
 
-					clearTimeout(timeout);
-					tapCount = 0;
-				}
-			}
-		}
+          node.dispatchEvent(
+            new CustomEvent(gestureName, {
+              detail: { x, y },
+            })
+          );
 
-		function onDown(activeEvents, event) {
-			if (!tapCount) {
-				clientX = event.clientX;
-				clientY = event.clientY;
-				startTime = Date.now();
-			}
+          clearTimeout(timeout);
+          tapCount = 0;
+        }
+      }
+    }
 
-			timeout = setTimeout(() => {
-				tapCount = 0;
-			}, parameters.timeframe);
-		}
+    function onDown(activeEvents, event) {
+      if (!tapCount) {
+        clientX = event.clientX;
+        clientY = event.clientY;
+        startTime = Date.now();
+      }
 
-		return setPointerControls(gestureName, node, null, onDown, onUp);
-	}
+      timeout = setTimeout(() => {
+        tapCount = 0;
+      }, parameters.timeframe);
+    }
+
+    return setPointerControls(gestureName, node, null, onDown, onUp);
+  }
 </script>
 
+<a href="/" class="href" use:link> To Home</a>
 <div
-	use:doubletap
-	on:doubletap={doubletapHandler}
-	style="width:500px;height:500px;border:1px solid black;"
+  use:doubletap
+  on:doubletap={doubletapHandler}
+  style="width:500px;height:500px;border:1px solid black;"
 >
-	double tap me {dx} {dy}
+  double tap me {dx}
+  {dy}
 </div>
