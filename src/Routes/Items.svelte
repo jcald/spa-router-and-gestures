@@ -4,4 +4,5 @@
 </script>
 
 <h1>Items {params.id}</h1>
+<a href="/" class="href" use:link> To Home</a>
 <a href="/about" class="href" use:link> To About Page</a>
